@@ -120,7 +120,7 @@
     counts: (s) => counts(s.b),
     initial(opts) {
       const b = new Array(N).fill(-1);
-      b[27] = 1; b[36] = 1; b[28] = 0; b[35] = 0;
+      b[27] = 0; b[36] = 0; b[28] = 1; b[35] = 1; // same as GamePigeon
       return { b, turn: opts && opts.first ? 1 : 0, last: null };
     },
     /* Legal moves; if the player to move is stuck, returns [PASS]. */

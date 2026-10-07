@@ -51,6 +51,14 @@
     engine: 'othello',
     sides: [{ name: 'Black', color: '#1b1b1f' }, { name: 'White', color: '#f4f4f4' }],
     swatch: (p) => GP.pieceSwatch('othp' + p),
+    // Older versions started with the center discs the other way round.
+    migrate(s) {
+      const old = s.b.every((v, i) => (i === 27 || i === 36 ? v === 1 : i === 28 || i === 35 ? v === 0 : v === -1));
+      if (!old) return s;
+      const b = s.b.slice();
+      b[27] = 0; b[36] = 0; b[28] = 1; b[35] = 1;
+      return Object.assign({}, s, { b });
+    },
     moveLabel: label,
     passMove: E.PASS,
     explain(s, m) {

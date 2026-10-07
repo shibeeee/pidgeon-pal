@@ -44,8 +44,8 @@ test('wins when it can', () => { let s = T.initial(); for (const m of [0, 3, 1, 
 
 console.log('Othello');
 const O = GP.engines.othello;
-test('opening has 4 moves', () => eq(O.legal(O.initial()).sort((a, b) => a - b), [19, 26, 37, 44]));
-test('a move flips a disc', () => { const s = O.apply(O.initial(), 19); eq(O.counts(s), [4, 1]); eq(s.turn, 1); });
+test('opening has 4 moves', () => eq(O.legal(O.initial()).sort((a, b) => a - b), [20, 29, 34, 43]));
+test('a move flips a disc', () => { const s = O.apply(O.initial(), 20); eq(O.counts(s), [4, 1]); eq(s.turn, 1); });
 test('search returns a legal move', () => { const s = O.initial(); ok(O.legal(s).includes(O.search(s, fast).move)); });
 test('self-play finishes', () => {
   let s = O.initial(), n = 0;

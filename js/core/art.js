@@ -39,7 +39,7 @@
     othello() {
       let s = '<rect x="44" y="14" width="72" height="72" rx="10" fill="#1e8c4e"/>';
       for (let k = 1; k < 4; k++) s += `<path d="M${44 + k * 18} 14v72M44 ${14 + k * 18}h72" stroke="#12693a" stroke-width="1.2"/>`;
-      const d = ['....', '.bw.', '.wb.', '..w.'];
+      const d = ['....', '.wb.', '.bw.', '..b.'];
       d.forEach((row, r) => row.split('').forEach((ch, c) => {
         if (ch === '.') return;
         s += `<circle cx="${53 + c * 18}" cy="${23 + r * 18}" r="6.4" fill="${ch === 'b' ? '#18181b' : '#f5f5f4'}"/>`;
