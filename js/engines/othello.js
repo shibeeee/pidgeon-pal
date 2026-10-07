@@ -135,4 +135,16 @@
       return { winner: c[0] === c[1] ? null : c[0] > c[1] ? 0 : 1, counts: c };
     },
   });
+
+  // Like GamePigeon: if the next player has no legal move, they're skipped
+  // automatically and the same player goes again (no Pass button needed).
+  const E = GP.engines.othello;
+  const baseApply = E.apply;
+  E.apply = function (s, m) {
+    const next = baseApply.call(this, s, m);
+    if (m !== PASS && !movesFor(next.b, next.turn).length && movesFor(next.b, 1 - next.turn).length) {
+      return Object.assign({}, next, { turn: 1 - next.turn, skipped: true });
+    }
+    return next;
+  };
 })(typeof globalThis !== 'undefined' ? globalThis : self);

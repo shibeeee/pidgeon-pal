@@ -61,11 +61,18 @@
     },
     moveLabel: label,
     passMove: E.PASS,
+    // A skipped turn means the same player goes again.
+    yourTurnText: (game) => (game.state.skipped ? 'They have no move: your turn again' : 'Your turn'),
+    theirTurnText: (game) => (game.state.skipped
+      ? (game.mode === 'ai' ? 'You have no move: computer goes again' : 'You have no move: they go again')
+      : (game.mode === 'ai' ? "Computer's turn" : 'Their turn: tap their move')),
     explain(s, m) {
       if (m === E.PASS) return 'no legal moves, so you must pass';
       const n = E.flipsFor(s, m).length;
       const corner = [0, 7, 56, 63].includes(m);
-      return (corner ? 'takes a corner, ' : '') + 'flips ' + GP.plural(n, 'disc');
+      const next = E.apply(s, m);
+      const again = next.skipped && !E.result(next) ? ', and they have no reply so you go again' : '';
+      return (corner ? 'takes a corner, ' : '') + 'flips ' + GP.plural(n, 'disc') + again;
     },
     evalScale: 300,
     render,
@@ -92,7 +99,8 @@
     help: `<p>Place a disc so it traps a line of your opponent's discs between two of yours. They flip to your color. Most discs at the end wins. (GamePigeon calls it Reversi.)</p>
       <ul><li>Playing a friend? Pick <b>A friend</b>, then tap each move they make. Your best move shows under the board. Turn on <b>Bot moves for me</b> and you only tap theirs.</li>
       <li>Dots show where you can play. Point at one to see what it flips.</li>
-      <li>Corners can't be flipped, so they're worth a lot.</li></ul>`,
+      <li>Corners can't be flipped, so they're worth a lot.</li>
+      <li>If a player has no move, they're skipped and the other player goes again, just like in GamePigeon. The bot plans for this.</li></ul>`,
     mount: (root) => new GP.BoardGame(root, cfg),
   });
 })();

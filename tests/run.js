@@ -47,6 +47,23 @@ const O = GP.engines.othello;
 test('opening has 4 moves', () => eq(O.legal(O.initial()).sort((a, b) => a - b), [20, 29, 34, 43]));
 test('a move flips a disc', () => { const s = O.apply(O.initial(), 20); eq(O.counts(s), [4, 1]); eq(s.turn, 1); });
 test('search returns a legal move', () => { const s = O.initial(); ok(O.legal(s).includes(O.search(s, fast).move)); });
+test('a player with no moves is skipped automatically', () => {
+  // Black a1, white b1 d1. Black plays c1 (flipping b1); white's lone d1 has no move, so black goes again (e1).
+  const b = new Array(64).fill(-1);
+  b[0] = 0; b[1] = 1; b[3] = 1;
+  const s = { b, turn: 0, last: null };
+  const next = O.apply(s, 2);
+  // White's only disc d1 has no move against a row of black, so black goes again or the game ends.
+  eq([next.turn, !!next.skipped, O.legal(next)], [0, true, [4]]);
+});
+test('search handles a forced pass', () => {
+  const b = new Array(64).fill(-1);
+  b[0] = 1; b[1] = 0; b[9] = 0; b[8] = 0; b[18] = 1; // white must have moves, black may not
+  const s = { b, turn: 0, last: null };
+  const leg = O.legal(s);
+  const r = O.search(s, fast);
+  ok(r && leg.includes(r.move), 'legal move or pass');
+});
 test('self-play finishes', () => {
   let s = O.initial(), n = 0;
   while (!O.result(s) && n++ < 130) s = O.apply(s, O.search(s, { timeMs: 30, maxDepth: 2 }).move);

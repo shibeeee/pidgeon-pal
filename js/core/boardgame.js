@@ -370,7 +370,7 @@
       else if (this.thinking && this.botTurn()) { text = 'Bot is thinking'; cls = 'thinking'; }
       else if (this.browsing() && (this.mode === 'ai' ? s.turn !== this.me : this.autoMe && s.turn === this.me)) { text = 'Earlier move'; cls = 'past'; }
       else if (s.turn === this.me) text = this.cfg.yourTurnText ? this.cfg.yourTurnText(this) : 'Your turn';
-      else text = this.mode === 'ai' ? "Computer's turn" : 'Their turn: tap their move';
+      else text = this.cfg.theirTurnText ? this.cfg.theirTurnText(this) : this.mode === 'ai' ? "Computer's turn" : 'Their turn: tap their move';
       el.className = 'status ' + cls;
       el.appendChild(this.cfg.swatch(res ? (res.winner == null ? s.turn : res.winner) : s.turn));
       el.appendChild(h('span', { class: 'status-text' }, text));
